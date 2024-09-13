@@ -6,12 +6,11 @@ systemctl enable docker
 systemctl start docker
 
 cat <<EOT >> /etc/hosts
-%{ for server, ip in zk_servers ~}
-${ip} ${server}
+%{ for interface in zk_interfaces ~}
+${interface.private_ip} ${interface.description}
 %{ endfor ~}
 EOT
 
-iptables -I INPUT -p tcp --dport 2181 -j ACCEPT
 iptables -I INPUT -p tcp --dport 2182 -j ACCEPT
 iptables -I INPUT -p tcp --dport 2888 -j ACCEPT
 iptables -I INPUT -p tcp --dport 3888 -j ACCEPT
@@ -25,7 +24,7 @@ docker run -d \
 --name=zookeeper \
 -e ZOOKEEPER_CLIENT_PORT=${client_port} \
 -e ZOOKEEPER_SERVER_ID=${zk_id} \
--e ZOOKEEPER_SERVERS=zk1.local:2888:3888\;zk2.local:2888:3888\;zk3.local:2888:3888 \
+-e ZOOKEEPER_SERVERS=%{ for index, interface in zk_interfaces }${interface.description}:2888:3888%{ if index+1 < length(zk_interfaces) }\;%{ endif }%{ endfor } \
 -p 2888:2888 \
 -p 3888:3888 \
 -p 2181:2181 \

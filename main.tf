@@ -122,15 +122,12 @@ resource "aws_instance" "zk" {
   key_name = aws_key_pair.default.key_name
   subnet_id = data.aws_subnet.gateway.id
   user_data = templatefile("user_data.tftpl", {
-    zk_servers = {
-      "zk1.local" = "${aws_network_interface.zk[0].private_ip}", 
-      "zk2.local" = "${aws_network_interface.zk[1].private_ip}", 
-      "zk3.local" = "${aws_network_interface.zk[2].private_ip}"
-    }, 
+    zk_interfaces = aws_network_interface.zk[*],    
     client_port = 2182,
     zk_id = count.index + 1,
     zk_version = var.zookeeper_version
   })
+  user_data_replace_on_change = true
 
   tags = {
     Name = "zookeeper"
@@ -142,6 +139,7 @@ resource "aws_network_interface" "zk" {
   subnet_id = data.aws_subnet.gateway.id
 
   security_groups = [aws_security_group.zk.id]
+  description = "zk${count.index + 1}.local"
 }
 
 resource "aws_network_interface_attachment" "zk" {
@@ -158,13 +156,15 @@ output "zk_ip" {
 
 resource "local_file" "zk_config" {
   filename = "zk.sh"
-  content = templatefile("user_data.tftpl", {
+  content = templatefile("zk_config.tftpl", {
     zk_servers = {
       "zk1.local" = "${aws_network_interface.zk[0].private_ip}", 
       "zk2.local" = "${aws_network_interface.zk[1].private_ip}", 
       "zk3.local" = "${aws_network_interface.zk[2].private_ip}"
     }, 
     client_port = 2182,
+    zk_instances = aws_instance.zk[*],
+    zk_interfaces = aws_network_interface.zk[*],
     zk_id = 1,
     zk_version = var.zookeeper_version
   })
