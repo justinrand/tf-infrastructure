@@ -1,0 +1,6 @@
+*.tfstate
+*.tfstate.backup
+.terraform
+
+# Sensitive files
+secrets
