@@ -149,7 +149,3 @@ resource "aws_network_interface_attachment" "zk" {
   instance_id          = aws_instance.zk[count.index].id
   network_interface_id = aws_network_interface.zk[count.index].id
 }
-
-output "zk_ip" {
-  value = aws_instance.zk.*.public_ip
-}

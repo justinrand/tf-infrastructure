@@ -19,7 +19,7 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_zk_ip"></a> [zk\_ip](#output\_zk\_ip) | n/a |
+| <a name="output_zk_public_ips"></a> [zk\_public\_ips](#output\_zk\_public\_ips) | Public IP addresses for the zk instances |
 ## Providers
 
 | Name | Version |
