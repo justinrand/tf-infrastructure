@@ -153,19 +153,3 @@ resource "aws_network_interface_attachment" "zk" {
 output "zk_ip" {
   value = aws_instance.zk.*.public_ip
 }
-
-resource "local_file" "zk_config" {
-  filename = "zk.sh"
-  content = templatefile("zk_config.tftpl", {
-    zk_servers = {
-      "zk1.local" = "${aws_network_interface.zk[0].private_ip}", 
-      "zk2.local" = "${aws_network_interface.zk[1].private_ip}", 
-      "zk3.local" = "${aws_network_interface.zk[2].private_ip}"
-    }, 
-    client_port = 2182,
-    zk_instances = aws_instance.zk[*],
-    zk_interfaces = aws_network_interface.zk[*],
-    zk_id = 1,
-    zk_version = var.zookeeper_version
-  })
-}
