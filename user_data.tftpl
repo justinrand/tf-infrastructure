@@ -1,0 +1,35 @@
+#!/bin/bash -x
+exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+yum install docker -y
+usermod -a -G docker ec2-user
+systemctl enable docker
+systemctl start docker
+
+cat <<EOT >> /etc/hosts
+%{ for server, ip in zk_servers ~}
+${ip} ${server}
+%{ endfor ~}
+EOT
+
+iptables -I INPUT -p tcp --dport 2181 -j ACCEPT
+iptables -I INPUT -p tcp --dport 2182 -j ACCEPT
+iptables -I INPUT -p tcp --dport 2888 -j ACCEPT
+iptables -I INPUT -p tcp --dport 3888 -j ACCEPT
+
+mkdir -p /var/log/zookeeper
+mkdir -p /etc/zookeeper
+mkdir -p /data/zookeeper
+
+docker run -d \
+--net=host \
+--name=zookeeper \
+-e ZOOKEEPER_CLIENT_PORT=${client_port} \
+-e ZOOKEEPER_SERVER_ID=${zk_id} \
+-e ZOOKEEPER_SERVERS=zk1.local:2888:3888\;zk2.local:2888:3888\;zk3.local:2888:3888 \
+-p 2888:2888 \
+-p 3888:3888 \
+-p 2181:2181 \
+-p 2182:2182 \
+-v /data/zookeeper/:/data \
+-v /var/log/zookeeper:/logs \
+confluentinc/cp-zookeeper:${zk_version}
