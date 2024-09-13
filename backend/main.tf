@@ -10,7 +10,7 @@ module "s3_bucket" {
   versioning = {
     enabled = true
   }
-  
+
   lifecycle_rule = [
     {
       id                                     = "noncurrent-expiration"

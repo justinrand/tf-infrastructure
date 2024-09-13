@@ -1,0 +1,16 @@
+output:
+  file: README.md
+  mode: replace
+
+content: |-
+
+  {{ include "docs/readme-main.md" }}
+  
+  {{ .Header }}
+  {{ .Inputs }}
+  {{ .Modules }}
+  {{ .Outputs }}
+  {{ .Providers }}
+  {{ .Requirements }}
+  {{ .Resources }}
+  {{ .Footer }}

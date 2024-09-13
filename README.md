@@ -1,9 +1,25 @@
-## Requirements
+<!-- BEGIN_TF_DOCS -->
 
-| Name | Version |
-|------|---------|
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.0 |
+# Description
 
+Terraform infrastructure
+
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_zookeeper_client_port"></a> [zookeeper\_client\_port](#input\_zookeeper\_client\_port) | Zookeeper client port | `number` | n/a | yes |
+| <a name="input_zookeeper_count"></a> [zookeeper\_count](#input\_zookeeper\_count) | Number of zookeeper nodes in the cluster | `number` | n/a | yes |
+| <a name="input_zookeeper_version"></a> [zookeeper\_version](#input\_zookeeper\_version) | CP Platform Zookeeper container image version | `string` | n/a | yes |
+## Modules
+
+No modules.
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_zk_ip"></a> [zk\_ip](#output\_zk\_ip) | n/a |
 ## Providers
 
 | Name | Version |
@@ -11,11 +27,11 @@
 | <a name="provider_aws"></a> [aws](#provider\_aws) | 5.66.0 |
 | <a name="provider_local"></a> [local](#provider\_local) | 2.5.2 |
 | <a name="provider_tls"></a> [tls](#provider\_tls) | 4.0.6 |
+## Requirements
 
-## Modules
-
-No modules.
-
+| Name | Version |
+|------|---------|
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.0 |
 ## Resources
 
 | Name | Type |
@@ -32,16 +48,4 @@ No modules.
 | [aws_subnet.gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnet) | data source |
 | [aws_vpc.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/vpc) | data source |
 
-## Inputs
-
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| <a name="input_zookeeper_client_port"></a> [zookeeper\_client\_port](#input\_zookeeper\_client\_port) | Zookeeper client port | `number` | n/a | yes |
-| <a name="input_zookeeper_count"></a> [zookeeper\_count](#input\_zookeeper\_count) | Number of zookeeper nodes in the cluster | `number` | n/a | yes |
-| <a name="input_zookeeper_version"></a> [zookeeper\_version](#input\_zookeeper\_version) | CP Platform Zookeeper container image version | `string` | n/a | yes |
-
-## Outputs
-
-| Name | Description |
-|------|-------------|
-| <a name="output_zk_ip"></a> [zk\_ip](#output\_zk\_ip) | n/a |
+<!-- END_TF_DOCS -->
